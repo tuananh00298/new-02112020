@@ -1,0 +1,51 @@
+<%
+  socket = [
+  ENV['DATABASE_MYSQL_SOCKET']
+].detect { |f| f && File.exist?(f) }
+  %>
+
+default: &default
+  adapter: mysql2
+  pool: 5
+  timeout: 5000
+
+development:
+  <<: *default
+  database: <%= ENV['DATABASE_NAME'] %>
+  <% if socket %>
+  socket: <%= socket %>
+  <% end %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+
+  # Warning: The database defined as "test" will be erased and
+  # re-generated from your development database when you run "rake".
+  # Do not set this db to the same as development or production.
+test:
+  <<: *default
+  adapter: sqlite3
+  database: db/selenium.sqlite3
+
+production:
+  <<: *default
+  database: <%= ENV['DATABASE_NAME'] %>
+  <% if socket %>
+  socket: <%= socket %>
+  <% end %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
+
+staging:
+  <<: *default
+  database: <%= ENV['DATABASE_NAME'] %>
+  <% if socket %>
+  socket: <%= socket %>
+  <% end %>
+  host: <%= ENV['DATABASE_HOST'] %>
+  port: <%= ENV['DATABASE_PORT'] %>
+  username: <%= ENV['DATABASE_USERNAME'] %>
+  password: <%= ENV['DATABASE_PASSWORD'] %>
